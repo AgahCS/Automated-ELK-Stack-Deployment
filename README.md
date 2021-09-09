@@ -44,11 +44,11 @@ The configuration details of each machine may be found below.
 The machines on the internal network are not exposed to the public Internet. 
 
 Only the Jumpbox provisioner machine can accept connections from the Internet. Access to this machine is only allowed from the following IP addresses:
-- Personal Public IP
+- Home Public IP
 
 Machines within the network can only be accessed by Jumpbox.
-- Which machine did you allow to access your ELK VM? What was its IP address?
-The only machine that was allowed access to the 'Elk-VM' is the Jumpbox-Provisioner machine(10.0.0.4) and with the personal Public IP
+
+-The only machine that was allowed access to the 'Elk-VM' is the Jumpbox-Provisioner machine(10.0.0.4) and with the Home Public IP
 through port 5601. 
 
 A summary of the access policies in place can be found in the table below.
@@ -66,45 +66,13 @@ Ansible was used to automate configuration of the ELK machine. No configuration 
 Ansible simplifies the process of deploying, configuring, and updating changes through the use of playbooks. 
 
 The playbook implements the following tasks:
-- name: Install docker.io
-    apt:
-      update_cache: yes
-      force_apt_get: yes
-      name: docker.io
-      state: present
 
-  - name: Install pip3
-    apt:
-      force_apt_get: yes
-      name: python3-pip
-      state: present
-
-  - name: Install Python Docker Module
-    pip:
-      name: docker
-      state: present
-
-  - name: Increase virtual memory
-    command: sysctl -w vm.max_map_count=262144
-
-  - name: Use more memory
-    sysctl:
-      name: vm.max_map_count
-      value: '262144'
-      state: present
-      reload: yes
-
-  - name: download and launch a docker elk container
-    docker_container:
-      name: elk
-      image: sebp/elk:761
-      state: started
-      restart_policy: always
-      published_ports:
-        - 5601:5601
-        - 9200:9200
-        - 5044:5044
-
+  - Install docker.io
+  - Install python pip3
+  - Install docker module
+  - Increase virtual memory
+  - Download and launch a docker ELK container w/ ports 5601, 9200, 5044
+ 
 The following screenshot displays the result of running `docker ps` after successfully configuring the ELK instance.
 
 ![](Images/sebp.PNG)
@@ -115,7 +83,8 @@ This ELK server is configured to monitor the following machines:
 - Web-2 10.0.0.6
 
 We have installed the following Beats on these machines:
-- Filebeat and Metricbeat
+- Filebeat
+- Metricbeat
 
 These Beats allow us to collect the following information from each machine:
 - Filebeat: Filebeat is a lightweight shipper for forwarding and centralizing log data. 
